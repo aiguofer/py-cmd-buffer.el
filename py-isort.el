@@ -45,15 +45,14 @@
 (defun py-isort--find-settings-path ()
   (expand-file-name
    (or (locate-dominating-file buffer-file-name ".isort.cfg")
+       (locate-dominating-file buffer-file-name "pyproject.toml")
        (file-name-directory buffer-file-name))))
 
 
 (defun py-isort--call-executable (errbuf file)
-  (let ((default-directory (py-isort--find-settings-path)))
     (zerop (apply 'call-process "isort" nil errbuf nil
-                  (append `(" " , file, " ",
-                            (concat "--settings-path=" default-directory))
-                          py-isort-options)))))
+                  (append `(" " , file)
+                          py-isort-options))))
 
 
 ;;;###autoload
